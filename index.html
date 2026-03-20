@@ -14,7 +14,7 @@
         
         body {
             font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -27,13 +27,14 @@
             max-width: 500px;
             height: 100vh;
             max-height: 800px;
-            background: #fff;
+            background: linear-gradient(180deg, #1e3a5f 0%, #0d1b2a 100%);
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(100,200,255,0.1);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             position: relative;
+            border: 2px solid rgba(100,200,255,0.2);
         }
         
         /* 顶部状态栏 */
@@ -42,17 +43,22 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 20px;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(90deg, #0d1b2a 0%, #1b3a4b 50%, #0d1b2a 100%);
             color: white;
+            border-bottom: 2px solid rgba(100,200,255,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
         
         .lives {
             font-size: 24px;
+            text-shadow: 0 0 10px rgba(255,100,100,0.5);
         }
         
         .coins {
             font-size: 18px;
             font-weight: bold;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255,215,0,0.5);
         }
         
         /* 屏幕容器 */
@@ -70,7 +76,7 @@
         
         /* 首页 */
         .home-screen {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: radial-gradient(ellipse at center, #1e3a5f 0%, #0d1b2a 70%);
             justify-content: center;
             align-items: center;
             text-align: center;
@@ -79,109 +85,222 @@
         .game-title {
             color: white;
             margin-bottom: 40px;
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes titleGlow {
+            from { text-shadow: 0 0 20px rgba(100,200,255,0.5), 0 0 40px rgba(100,200,255,0.3); }
+            to { text-shadow: 0 0 30px rgba(100,200,255,0.8), 0 0 60px rgba(100,200,255,0.5), 0 0 80px rgba(100,200,255,0.3); }
         }
         
         .game-title h1 {
             font-size: 36px;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(90deg, #64c8ff, #ffd700, #ff6b6b, #64c8ff);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
         
         .game-title p {
             font-size: 16px;
             opacity: 0.9;
+            color: #a0d2eb;
         }
         
         .subject-btn {
-            width: 200px;
-            padding: 20px;
-            margin: 10px;
+            width: 220px;
+            padding: 22px;
+            margin: 12px;
             border: none;
             border-radius: 15px;
             font-size: 24px;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s;
             color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .subject-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .subject-btn:hover::before {
+            left: 100%;
         }
         
         .subject-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
         
-        .math-btn { background: linear-gradient(135deg, #FF6B6B, #EE5A6F); }
-        .chinese-btn { background: linear-gradient(135deg, #4ECDC4, #44A08D); }
-        .english-btn { background: linear-gradient(135deg, #45B7D1, #667eea); }
+        .math-btn { 
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 50%, #c44569 100%);
+            box-shadow: 0 8px 25px rgba(238,90,111,0.4);
+        }
+        .chinese-btn { 
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 50%, #096c47 100%);
+            box-shadow: 0 8px 25px rgba(68,160,141,0.4);
+        }
+        .english-btn { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            box-shadow: 0 8px 25px rgba(102,126,234,0.4);
+        }
         
         .collection-btn {
             margin-top: 30px;
-            padding: 15px 40px;
-            background: linear-gradient(135deg, #FFD93D, #F6AD55);
+            padding: 18px 50px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 50%, #ff6b35 100%);
             border: none;
-            border-radius: 25px;
-            font-size: 20px;
+            border-radius: 30px;
+            font-size: 22px;
             font-weight: bold;
             cursor: pointer;
-            color: #333;
-            transition: transform 0.2s;
+            color: #1a1a2e;
+            transition: all 0.3s;
+            box-shadow: 0 8px 25px rgba(255,215,0,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .collection-btn::after {
+            content: '✨';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: sparkle 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: translateY(-50%) scale(1); }
+            50% { opacity: 0.5; transform: translateY(-50%) scale(1.2); }
         }
         
         .collection-btn:hover {
             transform: scale(1.05);
+            box-shadow: 0 12px 35px rgba(255,215,0,0.6);
         }
         
         /* 关卡选择 */
         .level-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
             margin-top: 20px;
+            padding: 10px;
         }
         
         .level-btn {
             aspect-ratio: 1;
             border: none;
-            border-radius: 50%;
-            font-size: 20px;
+            border-radius: 15px;
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
         
         .level-btn.locked {
-            background: #ddd;
-            color: #999;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: #5d6d7e;
             cursor: not-allowed;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
         }
         
         .level-btn.unlocked {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
             color: white;
+            box-shadow: 0 4px 15px rgba(52,152,219,0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 4px 15px rgba(52,152,219,0.4); }
+            50% { box-shadow: 0 4px 25px rgba(52,152,219,0.7); }
         }
         
         .level-btn.completed {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
             color: white;
+            box-shadow: 0 4px 15px rgba(39,174,96,0.4);
+        }
+        
+        .level-btn.completed::after {
+            content: '✓';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 12px;
+            background: rgba(255,255,255,0.3);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .level-btn:hover:not(.locked) {
-            transform: scale(1.1);
+            transform: scale(1.1) rotate(3deg);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .level-btn.boss {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            animation: bossPulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes bossPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(231,76,60,0.6); }
+            50% { box-shadow: 0 0 40px rgba(231,76,60,0.9); }
         }
         
         /* 答题界面 */
         .question-card {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 20px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #2c5364 100%);
+            border-radius: 20px;
+            padding: 25px;
             margin-bottom: 20px;
+            border: 2px solid rgba(100,200,255,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .level-badge {
+            display: inline-block;
+            background: linear-gradient(90deg, #f39c12, #e74c3c);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
         
         .question-text {
             font-size: 20px;
             line-height: 1.6;
-            color: #333;
+            color: #fff;
             margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         
         .options {
@@ -191,55 +310,71 @@
         }
         
         .option-btn {
-            padding: 15px 20px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            background: white;
+            padding: 18px 20px;
+            border: 2px solid rgba(100,200,255,0.3);
+            border-radius: 15px;
+            background: rgba(255,255,255,0.05);
             font-size: 16px;
             cursor: pointer;
             text-align: left;
-            transition: all 0.2s;
+            transition: all 0.3s;
+            color: #fff;
         }
         
         .option-btn:hover {
-            border-color: #667eea;
-            background: #f0f4ff;
+            border-color: #64c8ff;
+            background: rgba(100,200,255,0.1);
+            transform: translateX(5px);
         }
         
         .option-btn.selected {
-            border-color: #667eea;
-            background: #667eea;
-            color: white;
+            border-color: #64c8ff;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            box-shadow: 0 0 20px rgba(52,152,219,0.5);
         }
         
         .option-btn.correct {
-            border-color: #4CAF50;
-            background: #4CAF50;
-            color: white;
+            border-color: #27ae60;
+            background: linear-gradient(90deg, #27ae60, #229954);
+            animation: correctPulse 0.5s ease;
+        }
+        
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
         
         .option-btn.wrong {
-            border-color: #f44336;
-            background: #f44336;
-            color: white;
+            border-color: #e74c3c;
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            animation: shake 0.5s ease-in-out;
         }
         
         .submit-btn {
             margin-top: 20px;
-            padding: 15px;
-            background: linear-gradient(135deg, #4CAF50, #45a049);
+            padding: 18px;
+            background: linear-gradient(90deg, #27ae60, #229954);
             border: none;
-            border-radius: 12px;
+            border-radius: 15px;
             color: white;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: bold;
             cursor: pointer;
             width: 100%;
+            box-shadow: 0 8px 25px rgba(39,174,96,0.4);
+            transition: all 0.3s;
+        }
+        
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(39,174,96,0.5);
         }
         
         .submit-btn:disabled {
-            background: #ccc;
+            background: #5d6d7e;
             cursor: not-allowed;
+            box-shadow: none;
         }
         
         /* 结果页面 */
@@ -247,22 +382,32 @@
             justify-content: center;
             align-items: center;
             text-align: center;
+            background: radial-gradient(ellipse at center, #1e3a5f 0%, #0d1b2a 70%);
         }
         
         .result-icon {
-            font-size: 80px;
+            font-size: 100px;
             margin-bottom: 20px;
+            animation: iconBounce 1s ease infinite;
+        }
+        
+        @keyframes iconBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
         }
         
         .result-title {
-            font-size: 32px;
+            font-size: 36px;
             margin-bottom: 15px;
+            color: white;
+            text-shadow: 0 0 20px rgba(255,255,255,0.3);
         }
         
         .result-message {
-            font-size: 16px;
-            color: #666;
+            font-size: 18px;
+            color: #a0d2eb;
             margin-bottom: 30px;
+            line-height: 1.6;
         }
         
         .result-buttons {
@@ -271,78 +416,271 @@
         }
         
         .result-btn {
-            padding: 15px 30px;
+            padding: 18px 35px;
             border: none;
-            border-radius: 10px;
-            font-size: 16px;
+            border-radius: 12px;
+            font-size: 18px;
             cursor: pointer;
             font-weight: bold;
+            transition: all 0.3s;
         }
         
         .primary-btn {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
+            background: linear-gradient(90deg, #27ae60, #229954);
             color: white;
+            box-shadow: 0 8px 25px rgba(39,174,96,0.4);
+        }
+        
+        .primary-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(39,174,96,0.5);
         }
         
         .secondary-btn {
-            background: #f0f0f0;
-            color: #333;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 2px solid rgba(255,255,255,0.3);
         }
         
-        /* 图鉴 */
+        .secondary-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        /* 图鉴系统 - 全新设计 */
+        .collection-screen {
+            background: linear-gradient(180deg, #0d1b2a 0%, #1b3a4b 100%);
+        }
+        
+        .collection-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .collection-header h2 {
+            color: #ffd700;
+            font-size: 28px;
+            text-shadow: 0 0 20px rgba(255,215,0,0.5);
+            margin-bottom: 10px;
+        }
+        
+        .collection-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            color: #a0d2eb;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
         .collection-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
-            margin-top: 15px;
+            margin-top: 10px;
+            padding-bottom: 80px;
         }
         
         .collection-card {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 20px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #2c5364 100%);
+            border-radius: 20px;
+            padding: 20px 15px;
             text-align: center;
             position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .collection-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
         }
         
         .collection-card.locked {
-            opacity: 0.5;
+            opacity: 0.6;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        }
+        
+        .collection-card.locked .collection-emoji {
+            filter: grayscale(100%);
+        }
+        
+        /* 稀有度边框发光效果 */
+        .collection-card.rarity-R { border-color: #90EE90; box-shadow: 0 0 15px rgba(144,238,144,0.3); }
+        .collection-card.rarity-SR { border-color: #87CEEB; box-shadow: 0 0 15px rgba(135,206,235,0.3); }
+        .collection-card.rarity-SSR { border-color: #DDA0DD; box-shadow: 0 0 15px rgba(221,160,221,0.3); }
+        .collection-card.rarity-Legend { border-color: #FFD700; box-shadow: 0 0 20px rgba(255,215,0,0.4); }
+        .collection-card.rarity-Myth { border-color: #FF69B4; box-shadow: 0 0 20px rgba(255,105,180,0.4); }
+        .collection-card.rarity-Ultimate { 
+            border-color: #FF4500; 
+            box-shadow: 0 0 25px rgba(255,69,0,0.5);
+            animation: ultimateGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes ultimateGlow {
+            from { box-shadow: 0 0 25px rgba(255,69,0,0.5); }
+            to { box-shadow: 0 0 40px rgba(255,215,0,0.7); }
         }
         
         .collection-emoji {
-            font-size: 60px;
+            font-size: 50px;
             margin-bottom: 10px;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
         
         .collection-name {
             font-weight: bold;
             margin-bottom: 5px;
+            color: #fff;
+            font-size: 14px;
+        }
+        
+        .collection-card.locked .collection-name {
+            color: #5d6d7e;
+        }
+        
+        .collection-stars {
+            font-size: 14px;
+            color: #ffd700;
+            text-shadow: 0 0 5px rgba(255,215,0,0.5);
+            margin-bottom: 5px;
         }
         
         .collection-rarity {
-            font-size: 12px;
+            font-size: 11px;
             padding: 3px 10px;
             border-radius: 10px;
             display: inline-block;
+            font-weight: bold;
         }
         
-        .rarity-R { background: #90EE90; }
-        .rarity-SR { background: #87CEEB; }
-        .rarity-SSR { background: #DDA0DD; }
-        .rarity-Legend { background: #FFD700; }
-        .rarity-Myth { background: #FF69B4; }
+        .rarity-R { background: linear-gradient(90deg, #90EE90, #7FDD7F); color: #1a472a; }
+        .rarity-SR { background: linear-gradient(90deg, #87CEEB, #6BB6FF); color: #1a3a5c; }
+        .rarity-SSR { background: linear-gradient(90deg, #DDA0DD, #DA70D6); color: #4a1a4a; }
+        .rarity-Legend { background: linear-gradient(90deg, #FFD700, #FFA500); color: #5c4a00; }
+        .rarity-Myth { background: linear-gradient(90deg, #FF69B4, #FF1493); color: #5c0030; }
         .rarity-Ultimate { background: linear-gradient(90deg, #FF4500, #FFD700); color: white; }
         
-        .back-btn {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            padding: 10px 20px;
-            background: rgba(0,0,0,0.1);
-            border: none;
+        .unlock-hint {
+            font-size: 11px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        
+        /* 图鉴详情弹窗 */
+        .collection-detail-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        
+        .collection-detail-overlay.active {
+            display: flex;
+        }
+        
+        .collection-detail-card {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2c5364 100%);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            max-width: 350px;
+            width: 100%;
+            border: 3px solid;
+            position: relative;
+            animation: detailPop 0.5s ease;
+        }
+        
+        @keyframes detailPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .collection-detail-card.rarity-R { border-color: #90EE90; }
+        .collection-detail-card.rarity-SR { border-color: #87CEEB; }
+        .collection-detail-card.rarity-SSR { border-color: #DDA0DD; }
+        .collection-detail-card.rarity-Legend { border-color: #FFD700; box-shadow: 0 0 40px rgba(255,215,0,0.3); }
+        .collection-detail-card.rarity-Myth { border-color: #FF69B4; box-shadow: 0 0 40px rgba(255,105,180,0.3); }
+        .collection-detail-card.rarity-Ultimate { 
+            border-color: #FF4500; 
+            box-shadow: 0 0 50px rgba(255,69,0,0.5);
+        }
+        
+        .detail-emoji {
+            font-size: 100px;
+            margin-bottom: 20px;
+            display: block;
+            animation: detailFloat 2s ease-in-out infinite;
+        }
+        
+        @keyframes detailFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.05); }
+        }
+        
+        .detail-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        
+        .detail-rarity {
+            font-size: 18px;
+            padding: 5px 20px;
             border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .detail-stars {
+            font-size: 24px;
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+        
+        .detail-desc {
+            font-size: 16px;
+            color: #a0d2eb;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 15px;
+        }
+        
+        .detail-close-btn {
+            padding: 15px 40px;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-size: 18px;
             cursor: pointer;
-            font-size: 14px;
+            font-weight: bold;
         }
         
         /* 道具栏 */
@@ -350,20 +688,28 @@
             display: flex;
             gap: 10px;
             margin-top: 15px;
-            padding: 10px;
-            background: #f0f0f0;
-            border-radius: 10px;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 15px;
+            border: 1px solid rgba(100,200,255,0.2);
         }
         
         .item-btn {
             flex: 1;
-            padding: 10px;
+            padding: 15px;
             border: none;
-            border-radius: 8px;
-            background: white;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
             cursor: pointer;
-            font-size: 20px;
+            font-size: 24px;
             position: relative;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .item-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
         }
         
         .item-btn:disabled {
@@ -375,11 +721,32 @@
             position: absolute;
             top: -5px;
             right: -5px;
-            background: #f44336;
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
             color: white;
             font-size: 12px;
-            padding: 2px 6px;
+            padding: 3px 8px;
             border-radius: 10px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        
+        .back-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            padding: 12px 25px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #fff;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-3px);
         }
         
         /* 动画 */
@@ -411,32 +778,75 @@
             animation: fadeIn 0.5s ease-out;
         }
         
-        /* 抽卡特效 */
+        /* 抽卡特效 - 升级版 */
         .gacha-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 1000;
             flex-direction: column;
+            overflow: hidden;
         }
         
         .gacha-overlay.active {
             display: flex;
         }
         
+        /* 粒子效果 */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: particleFloat 3s ease-in-out infinite;
+        }
+        
+        @keyframes particleFloat {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+        }
+        
         .gacha-card {
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            border-radius: 20px;
-            padding: 40px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #2c5364 100%);
+            border-radius: 30px;
+            padding: 50px;
             text-align: center;
-            transform: scale(0) rotateY(180deg);
-            transition: transform 1s ease-out;
+            transform: scale(0) rotateY(720deg);
+            transition: transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border: 5px solid;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        
+        .gacha-card.rarity-R { border-color: #90EE90; }
+        .gacha-card.rarity-SR { border-color: #87CEEB; }
+        .gacha-card.rarity-SSR { border-color: #DDA0DD; }
+        .gacha-card.rarity-Legend { border-color: #FFD700; box-shadow: 0 0 60px rgba(255,215,0,0.5); }
+        .gacha-card.rarity-Myth { border-color: #FF69B4; box-shadow: 0 0 60px rgba(255,105,180,0.5); }
+        .gacha-card.rarity-Ultimate { 
+            border-color: #FF4500; 
+            box-shadow: 0 0 80px rgba(255,69,0,0.7);
+            animation: ultimatePulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes ultimatePulse {
+            0%, 100% { box-shadow: 0 0 80px rgba(255,69,0,0.7); }
+            50% { box-shadow: 0 0 100px rgba(255,215,0,0.9); }
         }
         
         .gacha-overlay.active .gacha-card {
@@ -444,29 +854,95 @@
         }
         
         .gacha-emoji {
-            font-size: 100px;
+            font-size: 120px;
             margin-bottom: 20px;
+            display: block;
+            animation: gachaFloat 2s ease-in-out infinite;
+        }
+        
+        @keyframes gachaFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-15px) scale(1.1); }
         }
         
         .gacha-title {
             color: white;
-            font-size: 24px;
+            font-size: 32px;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(255,255,255,0.5);
         }
         
         .gacha-rarity {
-            font-size: 18px;
-            color: #fff;
-            background: rgba(0,0,0,0.3);
-            padding: 5px 15px;
-            border-radius: 15px;
+            font-size: 24px;
+            padding: 10px 25px;
+            border-radius: 25px;
             display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .gacha-stars {
+            font-size: 30px;
+            color: #ffd700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255,215,0,0.5);
+        }
+        
+        .gacha-hint {
+            color: #a0d2eb;
+            font-size: 16px;
+        }
+        
+        .new-badge {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            animation: newBadgePulse 1s ease-in-out infinite;
+            box-shadow: 0 5px 15px rgba(231,76,60,0.5);
+        }
+        
+        @keyframes newBadgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        /* 连击显示 */
+        .combo-display {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 60px;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 0 0 30px rgba(255,215,0,0.8);
+            pointer-events: none;
+            opacity: 0;
+            z-index: 999;
+        }
+        
+        .combo-display.show {
+            animation: comboShow 1s ease-out forwards;
+        }
+        
+        @keyframes comboShow {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1) translateY(-50px); }
         }
     </style>
 </head>
 <body>
     <div id="gameContainer">
+        <!-- 连击显示 -->
+        <div class="combo-display" id="comboDisplay"></div>
+        
         <!-- 顶部状态栏 -->
         <div class="header" id="header" style="display:none;">
             <div class="lives" id="livesDisplay">❤️❤️❤️</div>
@@ -487,8 +963,8 @@
         
         <!-- 关卡选择 -->
         <div class="screen" id="levelScreen">
-            <h2 id="levelTitle" style="text-align:center;margin-bottom:10px;">数学挑战</h2>
-            <p style="text-align:center;color:#666;margin-bottom:20px;">选择关卡开始挑战</p>
+            <h2 id="levelTitle" style="text-align:center;margin-bottom:10px;color:#fff;">数学挑战</h2>
+            <p style="text-align:center;color:#a0d2eb;margin-bottom:20px;">选择关卡开始挑战</p>
             <div class="level-grid" id="levelGrid"></div>
             <button class="back-btn" onclick="goHome()">← 返回</button>
         </div>
@@ -496,6 +972,7 @@
         <!-- 答题界面 -->
         <div class="screen" id="gameScreen">
             <div class="question-card">
+                <span class="level-badge" id="levelBadge">关卡 1</span>
                 <div class="question-text" id="questionText"></div>
                 <div class="options" id="optionsContainer"></div>
             </div>
@@ -517,41 +994,86 @@
         </div>
         
         <!-- 图鉴 -->
-        <div class="screen" id="collectionScreen">
-            <h2 style="text-align:center;margin-bottom:5px;">🏆 我的图鉴</h2>
-            <p style="text-align:center;color:#666;margin-bottom:15px;" id="collectionProgress">收集进度: 0/6</p>
+        <div class="screen collection-screen" id="collectionScreen">
+            <div class="collection-header">
+                <h2>🏆 我的图鉴</h2>
+                <div class="collection-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="collectionCount">0</div>
+                        <div>已收集</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalCount">12</div>
+                        <div>总卡牌</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="rareCount">0</div>
+                        <div>稀有+</div>
+                    </div>
+                </div>
+            </div>
             <div class="collection-grid" id="collectionGrid"></div>
             <button class="back-btn" onclick="goHome()">← 返回</button>
         </div>
         
+        <!-- 图鉴详情 -->
+        <div class="collection-detail-overlay" id="collectionDetail" onclick="closeCollectionDetail()">
+            <div class="collection-detail-card" id="detailCard" onclick="event.stopPropagation()">
+                <span class="detail-emoji" id="detailEmoji"></span>
+                <div class="detail-name" id="detailName"></div>
+                <span class="detail-rarity" id="detailRarity"></span>
+                <div class="detail-stars" id="detailStars"></div>
+                <div class="detail-desc" id="detailDesc"></div>
+                <button class="detail-close-btn" onclick="closeCollectionDetail()">关闭</button>
+            </div>
+        </div>
+        
         <!-- 抽卡特效 -->
         <div class="gacha-overlay" id="gachaOverlay" onclick="closeGacha()">
-            <div class="gacha-card" onclick="event.stopPropagation()">
-                <div class="gacha-emoji" id="gachaEmoji"></div>
+            <div class="particles" id="particles"></div>
+            <div class="gacha-card" id="gachaCard" onclick="event.stopPropagation()">
+                <span class="new-badge">NEW!</span>
+                <span class="gacha-emoji" id="gachaEmoji"></span>
                 <div class="gacha-title" id="gachaTitle"></div>
-                <div class="gacha-rarity" id="gachaRarity"></div>
-                <p style="color:white;margin-top:20px;">点击任意处继续</p>
+                <span class="gacha-rarity" id="gachaRarity"></span>
+                <div class="gacha-stars" id="gachaStars"></div>
+                <p class="gacha-hint">✨ 点击任意处继续 ✨</p>
             </div>
         </div>
     </div>
 
 <script>
-// 游戏配置
+// 游戏配置 - 全新图鉴系统
 const CONFIG = {
     MAX_LIVES: 3,
     MAX_COMBO: 10,
     COMBO_BONUS: 5,
     COLLECTIONS: [
-        { id: 0, name: '萌系小动物', rarity: 'R', stars: 3, level: 5, color: '#90EE90', emoji: '🐰', desc: '可爱的小动物伙伴' },
-        { id: 1, name: '魔法学徒', rarity: 'SR', stars: 4, level: 10, color: '#87CEEB', emoji: '🧙', desc: '初识魔法的学徒' },
-        { id: 2, name: '元素法师', rarity: 'SSR', stars: 4, level: 15, color: '#DDA0DD', emoji: '🔮', desc: '掌控元素之力' },
-        { id: 3, name: '龙骑士', rarity: 'Legend', stars: 5, level: 20, color: '#FFD700', emoji: '🐉', desc: '与巨龙并肩作战' },
-        { id: 4, name: '星空守护者', rarity: 'Myth', stars: 5, level: 25, color: '#FF69B4', emoji: '⭐', desc: '守护宇宙星辰' },
-        { id: 5, name: '知识之神', rarity: 'Ultimate', stars: 6, level: 30, color: '#FF4500', emoji: '👑', desc: '知识的至高存在' }
+        // R 级 (普通) - 3星
+        { id: 0, name: '数学小精灵', rarity: 'R', stars: 3, level: 3, color: '#90EE90', emoji: '🧮', desc: '热爱数学的小精灵，计算器是它的魔法杖' },
+        { id: 1, name: '语文书虫', rarity: 'R', stars: 3, level: 6, color: '#90EE90', emoji: '📚', desc: '在书海中遨游的小书虫，通晓古今诗文' },
+        { id: 2, name: '英语鹦鹉', rarity: 'R', stars: 3, level: 9, color: '#90EE90', emoji: '🦜', desc: '会说多国语言的聪明鹦鹉' },
+        
+        // SR 级 (稀有) - 4星
+        { id: 3, name: '几何法师', rarity: 'SR', stars: 4, level: 12, color: '#87CEEB', emoji: '📐', desc: '掌握几何奥秘的法师，图形随心变换' },
+        { id: 4, name: '诗词仙子', rarity: 'SR', stars: 4, level: 15, color: '#87CEEB', emoji: '🧚', desc: '吟诵千古绝句的美丽仙子' },
+        { id: 5, name: '语法守卫', rarity: 'SR', stars: 4, level: 18, color: '#87CEEB', emoji: '🛡️', desc: '守护英语语法规则的忠诚卫士' },
+        
+        // SSR 级 (超稀有) - 4星
+        { id: 6, name: '代数巫师', rarity: 'SSR', stars: 4, level: 24, color: '#DDA0DD', emoji: '🧙‍♂️', desc: '精通代数魔法的高级巫师' },
+        { id: 7, name: '文学巨匠', rarity: 'SSR', stars: 4, level: 27, color: '#DDA0DD', emoji: '✍️', desc: '笔下生花的文学大师' },
+        { id: 8, name: '语言通者', rarity: 'SSR', stars: 4, level: 30, color: '#DDA0DD', emoji: '🌐', desc: '通晓世界语言的智者' },
+        
+        // Legend 级 (传说) - 5星
+        { id: 9, name: '数学之王', rarity: 'Legend', stars: 5, level: 40, color: '#FFD700', emoji: '👑', desc: '数学领域的至高无上的王者' },
+        { id: 10, name: '文曲星', rarity: 'Legend', stars: 5, level: 45, color: '#FFD700', emoji: '⭐', desc: '文昌帝君的化身，文采斐然' },
+        
+        // Myth 级 (神话) - 5星
+        { id: 11, name: '知识之神', rarity: 'Myth', stars: 5, level: 60, color: '#FF69B4', emoji: '🏛️', desc: '全知全能的知识之神，掌控一切学问' }
     ]
 };
 
-// 题库
+// 题库 - 增加到20关
 const QUESTIONS = {
     math: [
         { level: 1, question: '25 × 4 = ?', options: ['100', '90', '110', '95'], answer: 0 },
@@ -563,7 +1085,17 @@ const QUESTIONS = {
         { level: 7, question: '圆的周长公式是？', options: ['C = 2πr', 'C = πr²', 'C = πd/2', 'C = 2πd'], answer: 0 },
         { level: 8, question: '0.25 = ?%', options: ['25%', '2.5%', '250%', '0.25%'], answer: 0 },
         { level: 9, question: '等边三角形每个角是？', options: ['60°', '90°', '45°', '120°'], answer: 0 },
-        { level: 10, question: '5³ = ?', options: ['125', '15', '243', '53'], answer: 0 }
+        { level: 10, question: '5³ = ?', options: ['125', '15', '243', '53'], answer: 0 },
+        { level: 11, question: '2/3 ÷ 4/9 = ?', options: ['3/2', '8/27', '1/3', '6/9'], answer: 0 },
+        { level: 12, question: '正方体表面积96cm²，一个面的面积是？', options: ['16cm²', '24cm²', '48cm²', '12cm²'], answer: 0 },
+        { level: 13, question: '36的因数有（ ）个', options: ['9个', '8个', '10个', '6个'], answer: 0 },
+        { level: 14, question: '工作效率问题：甲3天完成，乙4天完成，合作需几天？', options: ['12/7天', '7天', '1天', '12天'], answer: 0 },
+        { level: 15, question: '数列2,5,8,11...的第20项是？', options: ['59', '60', '58', '62'], answer: 0 },
+        { level: 16, question: '圆柱体积公式是？', options: ['V = πr²h', 'V = 2πrh', 'V = πdh', 'V = πr²'], answer: 0 },
+        { level: 17, question: '解方程：3x + 7 = 22，x = ?', options: ['5', '6', '7', '4'], answer: 0 },
+        { level: 18, question: '比例尺1:5000，图上5cm代表实际距离？', options: ['250m', '500m', '25m', '2500m'], answer: 0 },
+        { level: 19, question: '鸡兔同笼，头35个，脚94只，鸡有几只？', options: ['23', '12', '35', '47'], answer: 0 },
+        { level: 20, question: '一个分数，分子分母和是42，约分后是2/5，原分数是？', options: ['12/30', '10/32', '14/28', '16/26'], answer: 0 }
     ],
     chinese: [
         { level: 1, question: '"床前明月光"的下一句是？', options: ['疑是地上霜', '举头望明月', '低头思故乡', '明月几时有'], answer: 0 },
@@ -575,7 +1107,17 @@ const QUESTIONS = {
         { level: 7, question: '"不知细叶谁裁出"运用了什么修辞？', options: ['比喻', '拟人', '夸张', '排比'], answer: 0 },
         { level: 8, question: '"先天下之忧而忧"出自？', options: ['《岳阳楼记》', '《滕王阁序》', '《醉翁亭记》', '《小石潭记》'], answer: 0 },
         { level: 9, question: '"唐宋八大家"中唐朝的有几位？', options: ['2位', '3位', '4位', '5位'], answer: 0 },
-        { level: 10, question: '"但愿人长久，千里共婵娟"的"婵娟"指？', options: ['月亮', '美女', '美好的时光', '遥远的思念'], answer: 0 }
+        { level: 10, question: '"但愿人长久，千里共婵娟"的"婵娟"指？', options: ['月亮', '美女', '美好的时光', '遥远的思念'], answer: 0 },
+        { level: 11, question: '"桃之夭夭，灼灼其华"出自？', options: ['《诗经》', '《楚辞》', '《论语》', '《道德经》'], answer: 0 },
+        { level: 12, question: '"一字千金"与哪位历史人物有关？', options: ['吕不韦', '秦始皇', '李斯', '张良'], answer: 0 },
+        { level: 13, question: '"采菊东篱下，悠然见南山"的作者陶渊明是哪个朝代？', options: ['东晋', '西晋', '南朝', '北朝'], answer: 0 },
+        { level: 14, question: '"出师未捷身先死"描写的是？', options: ['诸葛亮', '周瑜', '曹操', '刘备'], answer: 0 },
+        { level: 15, question: '"飞流直下三千尺"运用了什么修辞？', options: ['夸张', '比喻', '拟人', '对偶'], answer: 0 },
+        { level: 16, question: '"楷书四大家"不包括？', options: ['王羲之', '颜真卿', '柳公权', '欧阳询'], answer: 0 },
+        { level: 17, question: '"路漫漫其修远兮"的下一句是？', options: ['吾将上下而求索', '衣带渐宽终不悔', '长风破浪会有时', '直挂云帆济沧海'], answer: 0 },
+        { level: 18, question: '"三顾茅庐"中刘备拜访的是？', options: ['诸葛亮', '庞统', '徐庶', '司马懿'], answer: 0 },
+        { level: 19, question: '"疏影横斜水清浅，暗香浮动月黄昏"描写的是？', options: ['梅花', '兰花', '竹子', '菊花'], answer: 0 },
+        { level: 20, question: '"文房四宝"指的是？', options: ['笔墨纸砚', '琴棋书画', '诗词歌赋', '梅兰竹菊'], answer: 0 }
     ],
     english: [
         { level: 1, question: '"Hello" 的意思是？', options: ['你好', '再见', '谢谢', '对不起'], answer: 0 },
@@ -587,7 +1129,17 @@ const QUESTIONS = {
         { level: 7, question: '"The book is ___ the table."', options: ['on', 'in', 'at', 'to'], answer: 0 },
         { level: 8, question: '"How many ___ do you have?"', options: ['books', 'book', 'a book', 'the book'], answer: 0 },
         { level: 9, question: '"He is ___ than me." (tall)', options: ['taller', 'tallest', 'more tall', 'most tall'], answer: 0 },
-        { level: 10, question: '"I have lived here ___ 2010."', options: ['since', 'for', 'at', 'in'], answer: 0 }
+        { level: 10, question: '"I have lived here ___ 2010."', options: ['since', 'for', 'at', 'in'], answer: 0 },
+        { level: 11, question: '"If it ___ tomorrow, we will go camping."', options: ['doesn\'t rain', 'won\'t rain', 'not rain', 'isn\'t rain'], answer: 0 },
+        { level: 12, question: '"The boy ___ is wearing a red hat is my brother."', options: ['who', 'which', 'what', 'whom'], answer: 0 },
+        { level: 13, question: '"I ___ my homework when you called."', options: ['was doing', 'did', 'am doing', 'have done'], answer: 0 },
+        { level: 14, question: '"Neither Tom ___ Jerry likes spicy food."', options: ['nor', 'or', 'and', 'but'], answer: 0 },
+        { level: 15, question: '"She suggested ___ to the cinema."', options: ['going', 'to go', 'go', 'went'], answer: 0 },
+        { level: 16, question: '"By the time I arrived, the movie ___."', options: ['had started', 'started', 'has started', 'was starting'], answer: 0 },
+        { level: 17, question: '"Not only ___ speak English, but he also speaks French."', options: ['does he', 'he does', 'he', 'is he'], answer: 0 },
+        { level: 18, question: '"I wish I ___ wings like a bird."', options: ['had', 'have', 'would have', 'will have'], answer: 0 },
+        { level: 19, question: '"Hardly ___ when it began to rain."', options: ['had he arrived', 'he had arrived', 'did he arrive', 'he arrived'], answer: 0 },
+        { level: 20, question: '"The book ___ by Mark Twain is very popular."', options: ['written', 'wrote', 'writing', 'was written'], answer: 0 }
     ]
 };
 
@@ -606,16 +1158,22 @@ let state = {
 
 // 加载存档
 function loadState() {
-    const saved = localStorage.getItem('knowledgeAdventure_v2');
+    const saved = localStorage.getItem('knowledgeAdventure_v3');
     if (saved) {
-        state = JSON.parse(saved);
+        const savedState = JSON.parse(saved);
+        // 兼容旧版本存档
+        if (savedState.unlockedLevels && savedState.unlockedLevels.math <= 10) {
+            state = savedState;
+        } else {
+            state = { ...state, ...savedState };
+        }
         updateHeader();
     }
 }
 
 // 保存存档
 function saveState() {
-    localStorage.setItem('knowledgeAdventure_v2', JSON.stringify(state));
+    localStorage.setItem('knowledgeAdventure_v3', JSON.stringify(state));
 }
 
 // 更新顶部状态
@@ -651,10 +1209,15 @@ function renderLevels() {
     grid.innerHTML = '';
     const unlocked = state.unlockedLevels[state.currentSubject];
     
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 1; i <= 20; i++) {
         const btn = document.createElement('button');
         btn.className = 'level-btn';
         btn.textContent = i;
+        
+        // BOSS关（每10关）
+        if (i % 10 === 0) {
+            btn.classList.add('boss');
+        }
         
         if (i < unlocked) {
             btn.classList.add('completed');
@@ -675,6 +1238,7 @@ function startLevel(level) {
     state.selectedOption = -1;
     const q = QUESTIONS[state.currentSubject].find(q => q.level === level);
     
+    document.getElementById('levelBadge').textContent = `关卡 ${level}${level % 10 === 0 ? ' 🔥BOSS' : ''}`;
     document.getElementById('questionText').textContent = q.question;
     const container = document.getElementById('optionsContainer');
     container.innerHTML = '';
@@ -729,7 +1293,7 @@ function useFreeze() {
     state.items.freeze--;
     saveState();
     updateItems();
-    alert('时间暂停！（演示效果）');
+    alert('⏸️ 时间暂停！（演示效果）');
 }
 
 function updateItems() {
@@ -742,6 +1306,34 @@ function updateItems() {
     document.getElementById('freezeBtn').disabled = state.items.freeze <= 0;
 }
 
+// 显示连击
+function showCombo() {
+    if (state.combo >= 3) {
+        const comboEl = document.getElementById('comboDisplay');
+        comboEl.textContent = `🔥 ${state.combo} 连击!`;
+        comboEl.classList.add('show');
+        setTimeout(() => comboEl.classList.remove('show'), 1000);
+    }
+}
+
+// 创建粒子效果
+function createParticles() {
+    const container = document.getElementById('particles');
+    container.innerHTML = '';
+    const colors = ['#FFD700', '#FF69B4', '#87CEEB', '#90EE90', '#FFA500'];
+    
+    for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.animationDelay = Math.random() * 2 + 's';
+        particle.style.width = Math.random() * 15 + 5 + 'px';
+        particle.style.height = particle.style.width;
+        container.appendChild(particle);
+    }
+}
+
 // 提交答案
 function submitAnswer(skipped = false) {
     const q = QUESTIONS[state.currentSubject].find(q => q.level === state.currentLevel);
@@ -751,6 +1343,7 @@ function submitAnswer(skipped = false) {
         state.combo++;
         const reward = 10 + Math.min(state.combo, 5) * 2;
         state.coins += reward;
+        showCombo();
         
         if (state.unlockedLevels[state.currentSubject] === state.currentLevel) {
             state.unlockedLevels[state.currentSubject]++;
@@ -759,7 +1352,7 @@ function submitAnswer(skipped = false) {
         saveState();
         
         // 检查是否解锁图鉴
-        const totalLevel = (state.currentSubject === 'math' ? 0 : state.currentSubject === 'chinese' ? 10 : 20) + state.currentLevel;
+        const totalLevel = (state.currentSubject === 'math' ? 0 : state.currentSubject === 'chinese' ? 20 : 40) + state.currentLevel;
         const collection = CONFIG.COLLECTIONS.find(c => c.level === totalLevel);
         
         if (collection && !state.collections.includes(collection.id)) {
@@ -793,15 +1386,17 @@ function showResult(success, reward, gameOver = false) {
     if (gameOver) {
         icon.textContent = '💔';
         title.textContent = '生命耗尽';
+        title.style.color = '#e74c3c';
         msg.textContent = '别灰心，休息一下再来挑战！';
         btns.innerHTML = `
             <button class="result-btn primary-btn" onclick="resetGame()">重新开始</button>
             <button class="result-btn secondary-btn" onclick="goHome()">返回首页</button>
         `;
     } else if (success) {
-        icon.textContent = '✅';
-        title.textContent = '回答正确！';
-        msg.innerHTML = `获得 ${reward} 金币<br>${state.combo > 1 ? `🔥 连击 x${state.combo}` : ''}`;
+        icon.textContent = state.combo >= 5 ? '🔥' : '✅';
+        title.textContent = state.combo >= 5 ? '太棒了！' : '回答正确！';
+        title.style.color = '#27ae60';
+        msg.innerHTML = `💰 获得 ${reward} 金币<br>${state.combo > 1 ? `🔥 连击 x${state.combo}` : ''}`;
         btns.innerHTML = `
             <button class="result-btn primary-btn" onclick="nextLevel()">下一关</button>
             <button class="result-btn secondary-btn" onclick="backToLevels()">返回关卡</button>
@@ -810,7 +1405,8 @@ function showResult(success, reward, gameOver = false) {
         const q = QUESTIONS[state.currentSubject].find(q => q.level === state.currentLevel);
         icon.textContent = '❌';
         title.textContent = '回答错误';
-        msg.innerHTML = `正确答案是: ${String.fromCharCode(65 + q.answer)}. ${q.options[q.answer]}<br>剩余生命: ${'❤️'.repeat(state.lives)}`;
+        title.style.color = '#e74c3c';
+        msg.innerHTML = `正确答案是: ${String.fromCharCode(65 + q.answer)}. ${q.options[q.answer]}<br>❤️ 剩余生命: ${state.lives}`;
         btns.innerHTML = `
             <button class="result-btn primary-btn" onclick="retryLevel()">再试一次</button>
             <button class="result-btn secondary-btn" onclick="backToLevels()">返回关卡</button>
@@ -822,25 +1418,40 @@ function showResult(success, reward, gameOver = false) {
 
 // 显示抽卡
 function showGacha(collection) {
+    createParticles();
     document.getElementById('gachaEmoji').textContent = collection.emoji;
     document.getElementById('gachaTitle').textContent = collection.name;
-    document.getElementById('gachaRarity').textContent = collection.rarity + ' ' + '★'.repeat(collection.stars);
+    document.getElementById('gachaRarity').textContent = collection.rarity;
     document.getElementById('gachaRarity').className = 'gacha-rarity rarity-' + collection.rarity;
+    document.getElementById('gachaStars').textContent = '★'.repeat(collection.stars);
+    
+    const card = document.getElementById('gachaCard');
+    card.className = 'gacha-card rarity-' + collection.rarity;
+    
     document.getElementById('gachaOverlay').classList.add('active');
 }
 
 function closeGacha() {
     document.getElementById('gachaOverlay').classList.remove('active');
-    showResult(true, 10);
+    showResult(true, 10 + Math.min(state.combo, 5) * 2);
 }
 
 // 导航函数
 function nextLevel() {
     state.currentLevel++;
-    if (state.currentLevel <= 10) {
+    if (state.currentLevel <= 20) {
         startLevel(state.currentLevel);
     } else {
-        backToLevels();
+        // 通关所有关卡
+        showScreen('resultScreen');
+        document.getElementById('resultIcon').textContent = '🏆';
+        document.getElementById('resultTitle').textContent = '恭喜通关！';
+        document.getElementById('resultTitle').style.color = '#ffd700';
+        document.getElementById('resultMessage').innerHTML = '太厉害了！你已经通关了所有关卡！<br>💰 总金币: ' + state.coins;
+        document.getElementById('resultButtons').innerHTML = `
+            <button class="result-btn primary-btn" onclick="goHome()">返回首页</button>
+            <button class="result-btn secondary-btn" onclick="showCollection()">查看图鉴</button>
+        `;
     }
 }
 
@@ -871,20 +1482,51 @@ function showCollection() {
     const grid = document.getElementById('collectionGrid');
     grid.innerHTML = '';
     
+    // 统计
+    const rareCount = state.collections.filter(id => {
+        const c = CONFIG.COLLECTIONS.find(col => col.id === id);
+        return c && ['SSR', 'Legend', 'Myth'].includes(c.rarity);
+    }).length;
+    
+    document.getElementById('collectionCount').textContent = state.collections.length;
+    document.getElementById('rareCount').textContent = rareCount;
+    
     CONFIG.COLLECTIONS.forEach(c => {
+        const unlocked = state.collections.includes(c.id);
         const card = document.createElement('div');
-        card.className = 'collection-card' + (state.collections.includes(c.id) ? '' : ' locked');
+        card.className = `collection-card rarity-${c.rarity} ${unlocked ? '' : 'locked'}`;
+        card.onclick = () => unlocked && showCollectionDetail(c);
+        
         card.innerHTML = `
-            <div class="collection-emoji">${c.emoji}</div>
-            <div class="collection-name">${state.collections.includes(c.id) ? c.name : '???'}</div>
-            <span class="collection-rarity rarity-${c.rarity}">${c.rarity} ${'★'.repeat(c.stars)}</span>
-            ${state.collections.includes(c.id) ? '' : `<p style="font-size:12px;color:#999;margin-top:5px;">通关${c.level}关解锁</p>`}
+            <span class="collection-emoji">${c.emoji}</span>
+            <div class="collection-name">${unlocked ? c.name : '???'}</div>
+            <div class="collection-stars">${'★'.repeat(c.stars)}</div>
+            <span class="collection-rarity rarity-${c.rarity}">${c.rarity}</span>
+            ${unlocked ? '' : `<div class="unlock-hint">通关第${c.level}关解锁</div>`}
         `;
         grid.appendChild(card);
     });
     
-    document.getElementById('collectionProgress').textContent = `收集进度: ${state.collections.length}/6`;
     showScreen('collectionScreen');
+}
+
+// 显示图鉴详情
+function showCollectionDetail(collection) {
+    document.getElementById('detailEmoji').textContent = collection.emoji;
+    document.getElementById('detailName').textContent = collection.name;
+    document.getElementById('detailRarity').textContent = collection.rarity;
+    document.getElementById('detailRarity').className = 'detail-rarity rarity-' + collection.rarity;
+    document.getElementById('detailStars').textContent = '★'.repeat(collection.stars);
+    document.getElementById('detailDesc').textContent = collection.desc;
+    
+    const card = document.getElementById('detailCard');
+    card.className = 'collection-detail-card rarity-' + collection.rarity;
+    
+    document.getElementById('collectionDetail').classList.add('active');
+}
+
+function closeCollectionDetail() {
+    document.getElementById('collectionDetail').classList.remove('active');
 }
 
 // 初始化

@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>知识大冒险 - 小学五年级学习闯关</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        #gameContainer {
+            width: 100%;
+            max-width: 500px;
+            height: 100vh;
+            max-height: 800px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        /* 顶部状态栏 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .lives {
+            font-size: 24px;
+        }
+        
+        .coins {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        /* 屏幕容器 */
+        .screen {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .screen.active {
+            display: flex;
+        }
+        
+        /* 首页 */
+        .home-screen {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .game-title {
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        .game-title h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .game-title p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .subject-btn {
+            width: 200px;
+            padding: 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            color: white;
+        }
+        
+        .subject-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .math-btn { background: linear-gradient(135deg, #FF6B6B, #EE5A6F); }
+        .chinese-btn { background: linear-gradient(135deg, #4ECDC4, #44A08D); }
+        .english-btn { background: linear-gradient(135deg, #45B7D1, #667eea); }
+        
+        .collection-btn {
+            margin-top: 30px;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #FFD93D, #F6AD55);
+            border: none;
+            border-radius: 25px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #333;
+            transition: transform 0.2s;
+        }
+        
+        .collection-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        /* 关卡选择 */
+        .level-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .level-btn {
+            aspect-ratio: 1;
+            border: none;
+            border-radius: 50%;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .level-btn.locked {
+            background: #ddd;
+            color: #999;
+            cursor: not-allowed;
+        }
+        
+        .level-btn.unlocked {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .level-btn.completed {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+        
+        .level-btn:hover:not(.locked) {
+            transform: scale(1.1);
+        }
+        
+        /* 答题界面 */
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .question-text {
+            font-size: 20px;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option-btn {
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+        }
+        
+        .option-btn:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .option-btn.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+        
+        .option-btn.correct {
+            border-color: #4CAF50;
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .option-btn.wrong {
+            border-color: #f44336;
+            background: #f44336;
+            color: white;
+        }
+        
+        .submit-btn {
+            margin-top: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        /* 结果页面 */
+        .result-screen {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .result-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        
+        .result-title {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+        
+        .result-message {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .result-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .result-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .primary-btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+        
+        .secondary-btn {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        /* 图鉴 */
+        .collection-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .collection-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .collection-card.locked {
+            opacity: 0.5;
+        }
+        
+        .collection-emoji {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+        
+        .collection-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .collection-rarity {
+            font-size: 12px;
+            padding: 3px 10px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        
+        .rarity-R { background: #90EE90; }
+        .rarity-SR { background: #87CEEB; }
+        .rarity-SSR { background: #DDA0DD; }
+        .rarity-Legend { background: #FFD700; }
+        .rarity-Myth { background: #FF69B4; }
+        .rarity-Ultimate { background: linear-gradient(90deg, #FF4500, #FFD700); color: white; }
+        
+        .back-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background: rgba(0,0,0,0.1);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        /* 道具栏 */
+        .items-bar {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+        
+        .item-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-size: 20px;
+            position: relative;
+        }
+        
+        .item-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .item-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #f44336;
+            color: white;
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+        
+        /* 动画 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        .bounce {
+            animation: bounce 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        /* 抽卡特效 */
+        .gacha-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            flex-direction: column;
+        }
+        
+        .gacha-overlay.active {
+            display: flex;
+        }
+        
+        .gacha-card {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            transform: scale(0) rotateY(180deg);
+            transition: transform 1s ease-out;
+        }
+        
+        .gacha-overlay.active .gacha-card {
+            transform: scale(1) rotateY(0);
+        }
+        
+        .gacha-emoji {
+            font-size: 100px;
+            margin-bottom: 20px;
+        }
+        
+        .gacha-title {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .gacha-rarity {
+            font-size: 18px;
+            color: #fff;
+            background: rgba(0,0,0,0.3);
+            padding: 5px 15px;
+            border-radius: 15px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <!-- 顶部状态栏 -->
+        <div class="header" id="header" style="display:none;">
+            <div class="lives" id="livesDisplay">❤️❤️❤️</div>
+            <div class="coins" id="coinsDisplay">💰 100</div>
+        </div>
+        
+        <!-- 首页 -->
+        <div class="screen home-screen active" id="homeScreen">
+            <div class="game-title">
+                <h1>📚 知识大冒险</h1>
+                <p>小学五年级学习闯关</p>
+            </div>
+            <button class="subject-btn math-btn" onclick="selectSubject('math')">🔢 数学</button>
+            <button class="subject-btn chinese-btn" onclick="selectSubject('chinese')">📖 语文</button>
+            <button class="subject-btn english-btn" onclick="selectSubject('english')">🔤 英语</button>
+            <button class="collection-btn" onclick="showCollection()">🎴 我的图鉴</button>
+        </div>
+        
+        <!-- 关卡选择 -->
+        <div class="screen" id="levelScreen">
+            <h2 id="levelTitle" style="text-align:center;margin-bottom:10px;">数学挑战</h2>
+            <p style="text-align:center;color:#666;margin-bottom:20px;">选择关卡开始挑战</p>
+            <div class="level-grid" id="levelGrid"></div>
+            <button class="back-btn" onclick="goHome()">← 返回</button>
+        </div>
+        
+        <!-- 答题界面 -->
+        <div class="screen" id="gameScreen">
+            <div class="question-card">
+                <div class="question-text" id="questionText"></div>
+                <div class="options" id="optionsContainer"></div>
+            </div>
+            <div class="items-bar">
+                <button class="item-btn" id="hintBtn" onclick="useHint()">💡<span class="item-count" id="hintCount">3</span></button>
+                <button class="item-btn" id="skipBtn" onclick="useSkip()">⏭️<span class="item-count" id="skipCount">1</span></button>
+                <button class="item-btn" id="freezeBtn" onclick="useFreeze()">⏸️<span class="item-count" id="freezeCount">1</span></button>
+            </div>
+            <button class="submit-btn" id="submitBtn" onclick="submitAnswer()" disabled>确认答案</button>
+            <button class="back-btn" onclick="backToLevels()">← 返回</button>
+        </div>
+        
+        <!-- 结果页面 -->
+        <div class="screen result-screen" id="resultScreen">
+            <div class="result-icon" id="resultIcon"></div>
+            <div class="result-title" id="resultTitle"></div>
+            <div class="result-message" id="resultMessage"></div>
+            <div class="result-buttons" id="resultButtons"></div>
+        </div>
+        
+        <!-- 图鉴 -->
+        <div class="screen" id="collectionScreen">
+            <h2 style="text-align:center;margin-bottom:5px;">🏆 我的图鉴</h2>
+            <p style="text-align:center;color:#666;margin-bottom:15px;" id="collectionProgress">收集进度: 0/6</p>
+            <div class="collection-grid" id="collectionGrid"></div>
+            <button class="back-btn" onclick="goHome()">← 返回</button>
+        </div>
+        
+        <!-- 抽卡特效 -->
+        <div class="gacha-overlay" id="gachaOverlay" onclick="closeGacha()">
+            <div class="gacha-card" onclick="event.stopPropagation()">
+                <div class="gacha-emoji" id="gachaEmoji"></div>
+                <div class="gacha-title" id="gachaTitle"></div>
+                <div class="gacha-rarity" id="gachaRarity"></div>
+                <p style="color:white;margin-top:20px;">点击任意处继续</p>
+            </div>
+        </div>
+    </div>
+
+<script>
+// 游戏配置
+const CONFIG = {
+    MAX_LIVES: 3,
+    MAX_COMBO: 10,
+    COMBO_BONUS: 5,
+    COLLECTIONS: [
+        { id: 0, name: '萌系小动物', rarity: 'R', stars: 3, level: 5, color: '#90EE90', emoji: '🐰', desc: '可爱的小动物伙伴' },
+        { id: 1, name: '魔法学徒', rarity: 'SR', stars: 4, level: 10, color: '#87CEEB', emoji: '🧙', desc: '初识魔法的学徒' },
+        { id: 2, name: '元素法师', rarity: 'SSR', stars: 4, level: 15, color: '#DDA0DD', emoji: '🔮', desc: '掌控元素之力' },
+        { id: 3, name: '龙骑士', rarity: 'Legend', stars: 5, level: 20, color: '#FFD700', emoji: '🐉', desc: '与巨龙并肩作战' },
+        { id: 4, name: '星空守护者', rarity: 'Myth', stars: 5, level: 25, color: '#FF69B4', emoji: '⭐', desc: '守护宇宙星辰' },
+        { id: 5, name: '知识之神', rarity: 'Ultimate', stars: 6, level: 30, color: '#FF4500', emoji: '👑', desc: '知识的至高存在' }
+    ]
+};
+
+// 题库
+const QUESTIONS = {
+    math: [
+        { level: 1, question: '25 × 4 = ?', options: ['100', '90', '110', '95'], answer: 0 },
+        { level: 2, question: '3/4 + 1/4 = ?', options: ['1', '1/2', '2', '3/4'], answer: 0 },
+        { level: 3, question: '长方形长8cm，宽5cm，面积是？', options: ['40cm²', '26cm²', '13cm²', '56cm²'], answer: 0 },
+        { level: 4, question: '12和18的最大公因数是？', options: ['6', '3', '2', '9'], answer: 0 },
+        { level: 5, question: '小明有100元，买了3本书每本25元，还剩？', options: ['25元', '50元', '75元', '15元'], answer: 0 },
+        { level: 6, question: '一个数的3倍是48，这个数是？', options: ['16', '15', '18', '12'], answer: 0 },
+        { level: 7, question: '圆的周长公式是？', options: ['C = 2πr', 'C = πr²', 'C = πd/2', 'C = 2πd'], answer: 0 },
+        { level: 8, question: '0.25 = ?%', options: ['25%', '2.5%', '250%', '0.25%'], answer: 0 },
+        { level: 9, question: '等边三角形每个角是？', options: ['60°', '90°', '45°', '120°'], answer: 0 },
+        { level: 10, question: '5³ = ?', options: ['125', '15', '243', '53'], answer: 0 }
+    ],
+    chinese: [
+        { level: 1, question: '"床前明月光"的下一句是？', options: ['疑是地上霜', '举头望明月', '低头思故乡', '明月几时有'], answer: 0 },
+        { level: 2, question: '"亡羊补牢"的"亡"意思是？', options: ['丢失', '死亡', '逃跑', '忘记'], answer: 0 },
+        { level: 3, question: '"春眠不觉晓"的作者是谁？', options: ['孟浩然', '李白', '杜甫', '王维'], answer: 0 },
+        { level: 4, question: '"守株待兔"比喻什么？', options: ['不劳而获的侥幸心理', '勤奋工作', '等待机会', '保护树木'], answer: 0 },
+        { level: 5, question: '"海内存知己"的下一句是？', options: ['天涯若比邻', '只缘身在此山中', '独在异乡为异客', '千里共婵娟'], answer: 0 },
+        { level: 6, question: '"卧薪尝胆"说的是谁的故事？', options: ['勾践', '项羽', '刘邦', '刘备'], answer: 0 },
+        { level: 7, question: '"不知细叶谁裁出"运用了什么修辞？', options: ['比喻', '拟人', '夸张', '排比'], answer: 0 },
+        { level: 8, question: '"先天下之忧而忧"出自？', options: ['《岳阳楼记》', '《滕王阁序》', '《醉翁亭记》', '《小石潭记》'], answer: 0 },
+        { level: 9, question: '"唐宋八大家"中唐朝的有几位？', options: ['2位', '3位', '4位', '5位'], answer: 0 },
+        { level: 10, question: '"但愿人长久，千里共婵娟"的"婵娟"指？', options: ['月亮', '美女', '美好的时光', '遥远的思念'], answer: 0 }
+    ],
+    english: [
+        { level: 1, question: '"Hello" 的意思是？', options: ['你好', '再见', '谢谢', '对不起'], answer: 0 },
+        { level: 2, question: '"I have two ___" (book的复数)', options: ['books', 'book', 'booking', 'booked'], answer: 0 },
+        { level: 3, question: '"She ___ to school every day."', options: ['goes', 'go', 'going', 'went'], answer: 0 },
+        { level: 4, question: '"What is your name?" 的正确回答是？', options: ['My name is Tom.', 'I am fine.', 'I am 10.', 'Nice to meet you.'], answer: 0 },
+        { level: 5, question: '"I like ___ apples."', options: ['eating', 'eat', 'ate', 'eats'], answer: 0 },
+        { level: 6, question: '"Yesterday I ___ to the park."', options: ['went', 'go', 'going', 'goes'], answer: 0 },
+        { level: 7, question: '"The book is ___ the table."', options: ['on', 'in', 'at', 'to'], answer: 0 },
+        { level: 8, question: '"How many ___ do you have?"', options: ['books', 'book', 'a book', 'the book'], answer: 0 },
+        { level: 9, question: '"He is ___ than me." (tall)', options: ['taller', 'tallest', 'more tall', 'most tall'], answer: 0 },
+        { level: 10, question: '"I have lived here ___ 2010."', options: ['since', 'for', 'at', 'in'], answer: 0 }
+    ]
+};
+
+// 游戏状态
+let state = {
+    coins: 100,
+    lives: 3,
+    unlockedLevels: { math: 1, chinese: 1, english: 1 },
+    collections: [],
+    combo: 0,
+    items: { hint: 3, skip: 1, freeze: 1 },
+    currentSubject: null,
+    currentLevel: null,
+    selectedOption: -1
+};
+
+// 加载存档
+function loadState() {
+    const saved = localStorage.getItem('knowledgeAdventure_v2');
+    if (saved) {
+        state = JSON.parse(saved);
+        updateHeader();
+    }
+}
+
+// 保存存档
+function saveState() {
+    localStorage.setItem('knowledgeAdventure_v2', JSON.stringify(state));
+}
+
+// 更新顶部状态
+function updateHeader() {
+    document.getElementById('livesDisplay').textContent = '❤️'.repeat(state.lives);
+    document.getElementById('coinsDisplay').textContent = `💰 ${state.coins}`;
+    document.getElementById('header').style.display = 'flex';
+}
+
+// 切换屏幕
+function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+    if (screenId === 'homeScreen') {
+        document.getElementById('header').style.display = 'none';
+    } else {
+        updateHeader();
+    }
+}
+
+// 选择学科
+function selectSubject(subject) {
+    state.currentSubject = subject;
+    const names = { math: '数学', chinese: '语文', english: '英语' };
+    document.getElementById('levelTitle').textContent = names[subject] + '挑战';
+    renderLevels();
+    showScreen('levelScreen');
+}
+
+// 渲染关卡
+function renderLevels() {
+    const grid = document.getElementById('levelGrid');
+    grid.innerHTML = '';
+    const unlocked = state.unlockedLevels[state.currentSubject];
+    
+    for (let i = 1; i <= 10; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'level-btn';
+        btn.textContent = i;
+        
+        if (i < unlocked) {
+            btn.classList.add('completed');
+        } else if (i === unlocked) {
+            btn.classList.add('unlocked');
+            btn.onclick = () => startLevel(i);
+        } else {
+            btn.classList.add('locked');
+        }
+        
+        grid.appendChild(btn);
+    }
+}
+
+// 开始关卡
+function startLevel(level) {
+    state.currentLevel = level;
+    state.selectedOption = -1;
+    const q = QUESTIONS[state.currentSubject].find(q => q.level === level);
+    
+    document.getElementById('questionText').textContent = q.question;
+    const container = document.getElementById('optionsContainer');
+    container.innerHTML = '';
+    
+    q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = String.fromCharCode(65 + idx) + '. ' + opt;
+        btn.onclick = () => selectOption(idx);
+        container.appendChild(btn);
+    });
+    
+    updateItems();
+    document.getElementById('submitBtn').disabled = true;
+    showScreen('gameScreen');
+}
+
+// 选择选项
+function selectOption(idx) {
+    state.selectedOption = idx;
+    document.querySelectorAll('.option-btn').forEach((btn, i) => {
+        btn.classList.toggle('selected', i === idx);
+    });
+    document.getElementById('submitBtn').disabled = false;
+}
+
+// 使用道具
+function useHint() {
+    if (state.items.hint <= 0) return;
+    state.items.hint--;
+    
+    const q = QUESTIONS[state.currentSubject].find(q => q.level === state.currentLevel);
+    const wrongOptions = q.options.map((_, i) => i).filter(i => i !== q.answer);
+    const toRemove = wrongOptions[Math.floor(Math.random() * wrongOptions.length)];
+    
+    const buttons = document.querySelectorAll('.option-btn');
+    buttons[toRemove].style.visibility = 'hidden';
+    saveState();
+    updateItems();
+}
+
+function useSkip() {
+    if (state.items.skip <= 0) return;
+    state.items.skip--;
+    saveState();
+    updateItems();
+    submitAnswer(true);
+}
+
+function useFreeze() {
+    if (state.items.freeze <= 0) return;
+    state.items.freeze--;
+    saveState();
+    updateItems();
+    alert('时间暂停！（演示效果）');
+}
+
+function updateItems() {
+    document.getElementById('hintCount').textContent = state.items.hint;
+    document.getElementById('skipCount').textContent = state.items.skip;
+    document.getElementById('freezeCount').textContent = state.items.freeze;
+    
+    document.getElementById('hintBtn').disabled = state.items.hint <= 0;
+    document.getElementById('skipBtn').disabled = state.items.skip <= 0;
+    document.getElementById('freezeBtn').disabled = state.items.freeze <= 0;
+}
+
+// 提交答案
+function submitAnswer(skipped = false) {
+    const q = QUESTIONS[state.currentSubject].find(q => q.level === state.currentLevel);
+    const correct = skipped || state.selectedOption === q.answer;
+    
+    if (correct) {
+        state.combo++;
+        const reward = 10 + Math.min(state.combo, 5) * 2;
+        state.coins += reward;
+        
+        if (state.unlockedLevels[state.currentSubject] === state.currentLevel) {
+            state.unlockedLevels[state.currentSubject]++;
+        }
+        
+        saveState();
+        
+        // 检查是否解锁图鉴
+        const totalLevel = (state.currentSubject === 'math' ? 0 : state.currentSubject === 'chinese' ? 10 : 20) + state.currentLevel;
+        const collection = CONFIG.COLLECTIONS.find(c => c.level === totalLevel);
+        
+        if (collection && !state.collections.includes(collection.id)) {
+            state.collections.push(collection.id);
+            saveState();
+            showGacha(collection);
+        } else {
+            showResult(true, reward);
+        }
+    } else {
+        state.lives--;
+        state.combo = 0;
+        saveState();
+        
+        if (state.lives <= 0) {
+            showResult(false, 0, true);
+        } else {
+            showResult(false, 0, false);
+        }
+    }
+}
+
+// 显示结果
+function showResult(success, reward, gameOver = false) {
+    const screen = document.getElementById('resultScreen');
+    const icon = document.getElementById('resultIcon');
+    const title = document.getElementById('resultTitle');
+    const msg = document.getElementById('resultMessage');
+    const btns = document.getElementById('resultButtons');
+    
+    if (gameOver) {
+        icon.textContent = '💔';
+        title.textContent = '生命耗尽';
+        msg.textContent = '别灰心，休息一下再来挑战！';
+        btns.innerHTML = `
+            <button class="result-btn primary-btn" onclick="resetGame()">重新开始</button>
+            <button class="result-btn secondary-btn" onclick="goHome()">返回首页</button>
+        `;
+    } else if (success) {
+        icon.textContent = '✅';
+        title.textContent = '回答正确！';
+        msg.innerHTML = `获得 ${reward} 金币<br>${state.combo > 1 ? `🔥 连击 x${state.combo}` : ''}`;
+        btns.innerHTML = `
+            <button class="result-btn primary-btn" onclick="nextLevel()">下一关</button>
+            <button class="result-btn secondary-btn" onclick="backToLevels()">返回关卡</button>
+        `;
+    } else {
+        const q = QUESTIONS[state.currentSubject].find(q => q.level === state.currentLevel);
+        icon.textContent = '❌';
+        title.textContent = '回答错误';
+        msg.innerHTML = `正确答案是: ${String.fromCharCode(65 + q.answer)}. ${q.options[q.answer]}<br>剩余生命: ${'❤️'.repeat(state.lives)}`;
+        btns.innerHTML = `
+            <button class="result-btn primary-btn" onclick="retryLevel()">再试一次</button>
+            <button class="result-btn secondary-btn" onclick="backToLevels()">返回关卡</button>
+        `;
+    }
+    
+    showScreen('resultScreen');
+}
+
+// 显示抽卡
+function showGacha(collection) {
+    document.getElementById('gachaEmoji').textContent = collection.emoji;
+    document.getElementById('gachaTitle').textContent = collection.name;
+    document.getElementById('gachaRarity').textContent = collection.rarity + ' ' + '★'.repeat(collection.stars);
+    document.getElementById('gachaRarity').className = 'gacha-rarity rarity-' + collection.rarity;
+    document.getElementById('gachaOverlay').classList.add('active');
+}
+
+function closeGacha() {
+    document.getElementById('gachaOverlay').classList.remove('active');
+    showResult(true, 10);
+}
+
+// 导航函数
+function nextLevel() {
+    state.currentLevel++;
+    if (state.currentLevel <= 10) {
+        startLevel(state.currentLevel);
+    } else {
+        backToLevels();
+    }
+}
+
+function retryLevel() {
+    startLevel(state.currentLevel);
+}
+
+function backToLevels() {
+    renderLevels();
+    showScreen('levelScreen');
+}
+
+function goHome() {
+    state.currentSubject = null;
+    state.currentLevel = null;
+    showScreen('homeScreen');
+}
+
+function resetGame() {
+    state.lives = 3;
+    state.combo = 0;
+    saveState();
+    goHome();
+}
+
+// 显示图鉴
+function showCollection() {
+    const grid = document.getElementById('collectionGrid');
+    grid.innerHTML = '';
+    
+    CONFIG.COLLECTIONS.forEach(c => {
+        const card = document.createElement('div');
+        card.className = 'collection-card' + (state.collections.includes(c.id) ? '' : ' locked');
+        card.innerHTML = `
+            <div class="collection-emoji">${c.emoji}</div>
+            <div class="collection-name">${state.collections.includes(c.id) ? c.name : '???'}</div>
+            <span class="collection-rarity rarity-${c.rarity}">${c.rarity} ${'★'.repeat(c.stars)}</span>
+            ${state.collections.includes(c.id) ? '' : `<p style="font-size:12px;color:#999;margin-top:5px;">通关${c.level}关解锁</p>`}
+        `;
+        grid.appendChild(card);
+    });
+    
+    document.getElementById('collectionProgress').textContent = `收集进度: ${state.collections.length}/6`;
+    showScreen('collectionScreen');
+}
+
+// 初始化
+window.onload = () => {
+    loadState();
+};
+</script>
+</body>
+</html>
